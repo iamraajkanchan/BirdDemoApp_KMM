@@ -1,5 +1,6 @@
 package com.example.bird_kmm_app.android
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -14,13 +15,19 @@ class MainActivity : ComponentActivity() {
         setContent {
             MyApplicationTheme {
                 val birdsViewModel = ViewModelProvider(this@MainActivity)[BirdViewModel::class.java]
-                DisplayAllBirds(viewModel = birdsViewModel)
+                DisplayAllBirds(viewModel = birdsViewModel) { goToTodosActivity() }
             }
+        }
+    }
+
+    private fun goToTodosActivity() {
+        Intent(this@MainActivity, TodosActivity::class.java).apply {
+            startActivity(this)
         }
     }
 }
 
 @Composable
-private fun DisplayAllBirds(viewModel: BirdViewModel) {
-    BirdCard(viewModel)
+private fun DisplayAllBirds(viewModel: BirdViewModel, call: () -> Unit) {
+    BirdCard(viewModel, call)
 }

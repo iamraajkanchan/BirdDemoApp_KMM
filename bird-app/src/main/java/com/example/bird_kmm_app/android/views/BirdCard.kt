@@ -28,7 +28,7 @@ import com.example.bird_kmm_app.android.model.BirdResponse
 import com.example.bird_kmm_app.android.viewmodel.BirdViewModel
 
 @Composable
-fun BirdCard(viewModel: BirdViewModel) {
+fun BirdCard(viewModel: BirdViewModel, call: () -> Unit) {
     val uiState by viewModel.uiState.collectAsState()
     Column(
         modifier = Modifier.fillMaxSize()
@@ -52,6 +52,9 @@ fun BirdCard(viewModel: BirdViewModel) {
                             Text(text = category)
                         }
                     }
+                }
+                Button(onClick = { call() }) {
+                    Text(text = "Todos")
                 }
             }
         }

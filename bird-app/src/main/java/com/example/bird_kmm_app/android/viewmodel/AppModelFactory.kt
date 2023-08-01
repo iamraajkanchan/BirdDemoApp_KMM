@@ -5,10 +5,12 @@ import androidx.lifecycle.ViewModelProvider
 import java.lang.IllegalArgumentException
 
 @Suppress("UNCHECKED_CAST")
-class BirdViewModelFactory : ViewModelProvider.Factory {
+class AppModelFactory : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(BirdViewModel::class.java)) {
-            return BirdViewModel() as T
+        return if (modelClass.isAssignableFrom(BirdViewModel::class.java)) {
+            BirdViewModel() as T
+        } else if (modelClass.isAssignableFrom(TodosViewModel::class.java)) {
+            TodosViewModel() as T
         } else {
             throw IllegalArgumentException("Local and anonymous classes can not be ViewModels")
         }
