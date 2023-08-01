@@ -34,4 +34,8 @@ class TodosViewModel : ViewModel() {
     fun setTodosType(type: Boolean?) {
         _uiState.update { it.copy(todosType = type) }
     }
+
+    override fun onCleared() {
+        repository.shutHttpClient()
+    }
 }
