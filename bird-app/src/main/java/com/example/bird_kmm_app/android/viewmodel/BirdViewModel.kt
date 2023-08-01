@@ -3,11 +3,7 @@ package com.example.bird_kmm_app.android.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.bird_kmm_app.android.model.BirdResponse
-import io.ktor.client.HttpClient
-import io.ktor.client.call.body
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.request.get
-import io.ktor.serialization.kotlinx.json.json
+import com.example.bird_kmm_app.android.repository.AppRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -24,21 +20,16 @@ data class BirdUiState(
 
 class BirdViewModel : ViewModel() {
     private val _uiState: MutableStateFlow<BirdUiState> = MutableStateFlow(BirdUiState())
+    private val repository: AppRepository = AppRepository.getInstance()
     val uiState: StateFlow<BirdUiState> = _uiState.asStateFlow()
-    private val httpClient = HttpClient() { install(ContentNegotiation) { json() } }
 
     init {
         viewModelScope.launch { updateBirds() }
     }
 
-    private suspend fun getBirds(): List<BirdResponse> {
-        return httpClient.get("https://sebastianaigner.github.io/demo-image-api/pictures.json")
-            .body()
-    }
-
     private fun updateBirds() {
         viewModelScope.launch {
-            _uiState.update { it.copy(birds = getBirds(), selectedCategories = "PIGEON") }
+            _uiState.update { it.copy(birds = repository.getBirds(), selectedCategories = "PIGEON") }
         }
     }
 
@@ -47,6 +38,6 @@ class BirdViewModel : ViewModel() {
     }
 
     override fun onCleared() {
-        httpClient.close()
+        repository.shutHttpClient()
     }
 }
