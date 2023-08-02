@@ -24,12 +24,17 @@ class BirdViewModel : ViewModel() {
     val uiState: StateFlow<BirdUiState> = _uiState.asStateFlow()
 
     init {
-        viewModelScope.launch { updateBirds() }
+        updateBirds()
     }
 
     private fun updateBirds() {
         viewModelScope.launch {
-            _uiState.update { it.copy(birds = repository.getBirds(), selectedCategories = "PIGEON") }
+            _uiState.update {
+                it.copy(
+                    birds = repository.getBirds(),
+                    selectedCategories = "PIGEON"
+                )
+            }
         }
     }
 
